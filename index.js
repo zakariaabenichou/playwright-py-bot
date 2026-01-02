@@ -1,8 +1,7 @@
 import express from 'express';
-// OLD: import { chromium } from 'playwright';
-import { chromium } from 'playwright-extra'; // <-- CHANGE THIS LINE
-import StealthPlugin from 'puppeteer-extra-plugin-stealth'; // <-- ADD THIS LINE
-import 'dotenv/config'; // Make sure this is at the very top for local testing
+import { chromium } from 'playwright-extra'; 
+import StealthPlugin from 'puppeteer-extra-plugin-stealth'; 
+import 'dotenv/config'; 
 
 // --- Environment Variables ---
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
@@ -17,10 +16,8 @@ async function runMidjourney() {
     let browser;
     try {
         console.log('Launching browser...');
-        // Use the stealth plugin before launching the browser
-        chromium.use(StealthPlugin()); // <-- ADD THIS LINE
+        chromium.use(StealthPlugin()); 
 
-        // *** IMPORTANT: Set headless: true for Render deployment ***
         browser = await chromium.launch({ headless: true });
     } catch (err) {
         console.error('Failed to launch browser:', err);
@@ -29,9 +26,8 @@ async function runMidjourney() {
 
     const context = await browser.newContext();
 
-    // WARNING: Automating a user account (self-botting) is against Discord's ToS.
-    // This method can lead to your account being banned.
-    // A proper Discord bot via their API is the recommended and safer approach.
+
+    // A proper Discord bot via their API 
     try {
         await context.addInitScript(token => {
             window.localStorage.setItem('token', `"${token}"`);
@@ -62,7 +58,7 @@ async function runMidjourney() {
         console.error('❌ Failed to load Discord page or find UI element:', err);
         try {
             console.error('Page content on error:', (await page.content()).substring(0, 1000));
-        } catch (e) { /* ignore */ }
+        } catch (e) { }
         await browser.close();
         return;
     }
